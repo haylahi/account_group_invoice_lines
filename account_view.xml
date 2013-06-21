@@ -33,6 +33,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='group_invoice_lines']" position="after">
                     <field name="group_method" attrs="{'invisible': [('group_invoice_lines','=', False)]}"/>
+                    <field name="group_products_text" attrs="{'readonly': [('group_method','!=','account')]}"/>
                 </xpath>
             </field>
         </record>
