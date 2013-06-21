@@ -36,16 +36,13 @@
         'base',
         'account',
     ],
-    'init_xml': [],
-    'images': [],
-    'update_xml': [
+
+    'data': [
         'account_view.xml',
     ],
-    'demo_xml': [],
-    'test': [],
+    'demo': [],
     'installable': True,
-    'active': False,
-    'license': 'AGPL-3',
+    'auto_install': False,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
