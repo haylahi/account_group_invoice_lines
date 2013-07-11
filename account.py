@@ -56,7 +56,10 @@ class account_move(osv.osv):
         """
         super(account_move, self).post(cr, uid, ids, context=context)
         invoice = context.get('invoice', False)
+
         if invoice and invoice.journal_id.group_invoice_lines and invoice.journal_id.group_method == 'account':
+            inv_type = invoice.type or False
+            s_inv_number = invoice.supplier_invoice_number or ''
             lang = self.pool.get('res.users').context_get(cr, uid)['lang']
             res_lang_obj = self.pool.get('res.lang')
             res_lang_ids = res_lang_obj.search(cr, uid, [('code', '=', lang)], limit=1, context=context)
@@ -67,10 +70,14 @@ class account_move(osv.osv):
                 
             for move in self.browse(cr, uid, ids, context=context):
                 if move.name != '/':
-                 #   date_due = invoice.date_due and datetime.strptime(invoice.date_due, '%Y-%m-%d').strftime(format_date) or ''
+                 
                     if group_text:
-                        move_line_obj.write(cr, uid, [line.id for line in move.line_id], {
-                        'name': group_text + move.name.ljust(20) }, context=context)
+                        if inv_type in ('out_invoice', 'out_refund'):
+                            move_line_obj.write(cr, uid, [line.id for line in move.line_id], {
+                            'name': group_text + move.name.ljust(20) }, context=context)
+                        else:
+                            move_line_obj.write(cr, uid, [line.id for line in move.line_id], {
+                            'name': group_text + s_inv_number }, context=context)
                     else:
                         move_line_obj.write(cr, uid, [line.id for line in move.line_id], {
                         'name': move.name.ljust(20) }, context=context)     
